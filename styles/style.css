@@ -34,8 +34,6 @@
 }
 
 .bouillon-btn span {
-  background: rgb(0, 172, 238);
-  background: linear-gradient(0deg, rgba(0, 172, 238, 1) 0%, rgba(2, 126, 251, 1) 100%);
   display: block;
   position: absolute;
   width: 300px;
@@ -60,15 +58,38 @@
   -webkit-transform-origin: 50% 50% -100px;
   -moz-transform-origin: 50% 50% -100px;
   transform-origin: 50% 50% -100px;
+  background-size: contain;
+}
+
+.bouillon-img__meat {
+  background: url('../assets/content/meat.png') no-repeat center;
+}
+
+.bouillon-img__fish {
+  background: url('../assets/content/fish.png') no-repeat center;
+}
+
+.bouillon-img__chiken {
+  background: url('../assets/content/chiken.png') no-repeat center;
 }
 
 .bouillon-btn span:nth-child(2) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  background: rgb(0, 172, 238);
+  background: linear-gradient(0deg, rgba(0, 172, 238, 1) 0%, rgba(2, 126, 251, 1) 100%);
   -webkit-transform: rotateX(0deg);
   -moz-transform: rotateX(0deg);
   transform: rotateX(0deg);
   -webkit-transform-origin: 50% 50% -100px;
   -moz-transform-origin: 50% 50% -100px;
   transform-origin: 50% 50% -100px;
+}
+
+.bouillon-btn:hover {
+  cursor: pointer;
 }
 
 .bouillon-btn:hover span:nth-child(1) {
