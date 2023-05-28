@@ -7,25 +7,27 @@ const bouillonList = document.querySelector('.bouillon-list');
 const menuBtns = document.createElement('div');
 menuBtns.className = 'menu-btns';
 
+let state;
+
 const bouillon = ['мясо', 'рыба', 'курица'];
 const ingredients = {
-  main: ['картошка', 'лук', 'морковка'],
+  main: ['картошка (~3шт)', 'лук (1шт)', 'морковка (1шт)'],
   optional: ['чеснок', 'зелень'],
   paprika: ['перец болгарский'],
 };
 const menu = {
   meat: [
-    { Щи: [ingredients['main'], 'капуста', 'томатная паста или помидор'] },
-    { Борщ: [ingredients['main'], 'капуста', 'свекла', 'томатная паста или помидор'] },
-    { Чечевичный: [ingredients['main'], 'чечевица', 'томатная паста или помидор'] },
-    { Грибной: [ingredients['main'], 'грибы', 'рис'] },
-    { 'С клецками': [ingredients['main'], 'яйцо', 'молоко', 'мука'] },
+    { Щи: [ingredients['main'], 'капуста', 'томатная паста (1 ст.ложка) или помидор'] },
+    { Борщ: [ingredients['main'], 'капуста', 'свекла', 'томатная паста (1 ст.ложка) или помидор'] },
+    { Чечевичный: [ingredients['main'], 'чечевица', 'томатная паста (1 ст.ложка) или помидор'] },
+    { Грибной: [ingredients['main'], 'грибы (~100гр)', 'рис (~треть маленького стакана)'] },
+    { 'С клецками': [ingredients['main'], 'яйцо', 'молоко (2 ст.ложки)', 'мука (6-7ст.ложек)'] },
     { 'Самое простое/быстрое/ващенекогда': [ingredients['main'], 'ничего'] },
   ],
-  fish: [{ 'С консервой': [ingredients['main'], 'рис'] }],
+  fish: [{ 'С консервой': [ingredients['main'], 'рис (~треть маленького стакана)'] }],
   chiken: [
-    { 'С вермишелью': [ingredients['main'], 'вермишель'] },
-    { 'С горошком': [ingredients['main'], 'горошек замороженный', 'помидор'] },
+    { 'С вермишелью': [ingredients['main'], 'вермишель (~треть маленького стакана)'] },
+    { 'С горошком': [ingredients['main'], 'горошек замороженный (~100гр)', 'помидор'] },
   ],
 };
 
@@ -93,6 +95,7 @@ const createIngredientsSection = (data) => {
   ingredientTitle.className = 'ingredients-title';
   ingredientTitle.textContent = 'Понадобится:';
   ingredientsSection.prepend(ingredientTitle);
+  state = data;
 
   createIngredientsBlock(ingredients['main'], 'Обязательно:', document.querySelector('.bouillon-pic').dataset.boullion);
   switch (true) {
@@ -101,7 +104,7 @@ const createIngredientsSection = (data) => {
       createIngredientsBlock(ingredients['paprika'], 'Можно добавить:');
       break;
     case data == 'Щи':
-      createAddIngredientsBlock(menu.meat);
+      createAddIngredientsBlock(data, menu.meat);
       createIngredientsBlock(ingredients['paprika'], 'Можно добавить:');
       break;
     case data == 'Чечевичный':
@@ -149,17 +152,23 @@ const createIngredientsBlock = (arr, title, boullion = false) => {
   blockTitle.textContent = title;
   ingredientsContainer.append(blockTitle);
   ingredientsSection.append(ingredientsContainer);
-
+  let el;
   if (boullion) {
     switch (document.querySelector('.bouillon-pic').dataset.boullion) {
       case 'meat':
-        ingredientsContainer.append('мясо');
+        el = document.createElement('span');
+        el.textContent = 'мясо';
+        ingredientsContainer.append(el);
         break;
       case 'fish':
-        ingredientsContainer.append('тунец');
+        el = document.createElement('span');
+        el.textContent = 'тунец';
+        ingredientsContainer.append(el);
         break;
       case 'chiken':
-        ingredientsContainer.append('курица');
+        el = document.createElement('span');
+        el.textContent = 'курица';
+        ingredientsContainer.append(el);
         break;
     }
   }
@@ -202,5 +211,92 @@ const cancelCooking = () => {
 };
 
 const discribeProcess = () => {
-  console.log('ok');
+  addArrow();
+  const processPic = document.createElement('img');
+  processPic.setAttribute('src', `./assets/content/process.png`);
+  processPic.className = 'bouillon-pic';
+  header.append(processPic);
+  ingredientsSection.innerHTML = '';
+  const processTitle = document.createElement('h3');
+  processTitle.textContent = 'Процесс';
+  processSection.prepend(processTitle);
+  createProcess();
 };
+
+const createProcess = () => {
+  const stepsContainer = document.createElement('div');
+  stepsContainer.className = 'steps-container';
+  processSection.append(stepsContainer);
+  const createStep = () => {
+    let el = document.createElement('p');
+    stepsContainer.append(el);
+    return el;
+  };
+  if (document.querySelector('.bouillon-pic').dataset.boullion == 'fish') {
+    createStep().textContent =
+      'Картошку помыть, почистить, порезать и поставить вариться с лавровым листиком. Масло из консервы перелить в сковородку, чтобы на нем жарить.';
+    createStep().textContent = frying();
+    createStep().textContent = erlyAdd('рис');
+    createStep().textContent = addFrying;
+    createStep().textContent = addTune;
+    createStep().textContent = green;
+  } else {
+    createStep().textContent = 'Ставим мясо вариться с лавровым листиком.';
+    createStep().textContent = 'Картошку помыть, почистить, порезать и добавить к мясу.';
+    createStep().textContent = frying();
+    createStep().textContent = removeMeat;
+    if (state == 'Борщ' || state == 'Щи' || state == 'Грибной' || state == 'С клецками') {
+      switch (true) {
+        case state == 'Борщ':
+          createStep().textContent = erlyAdd('капусту');
+          createStep().textContent = moreFrying('свеклу, потом перец, если есть, и томатную пасту');
+          break;
+        case state == 'Щи':
+          createStep().textContent = erlyAdd('капусту');
+          createStep().textContent = moreFrying('перец, если есть, и томатную пасту');
+          break;
+        case state == 'Грибной':
+          createStep().textContent = erlyAdd('рис');
+          createStep().textContent = moreFrying('грибы');
+          break;
+        case state == 'С клецками':
+          createStep().textContent = moreFrying('перец');
+      }
+    }
+
+    createStep().textContent = addFrying;
+    if (state == 'Чечевичный' || state == 'С клецками' || state == 'С вермишелью' || state == 'С горошком') {
+      switch (true) {
+        case state == 'Чечевичный':
+          createStep().textContent = lastAdd('чечевицу и томатную пасту');
+          break;
+        case state == 'С клецками':
+          createStep().textContent = lastAdd(
+            'клецки. Для этого смешиваем две столовых ложки молока, яйцо и 6-7 ложек муки. Тесто не должно "течь", оно должно рваться. Зачерпываем полчайной ложечки теста, другой ложечкой снимаем его в кастрюлю'
+          );
+          break;
+        case state == 'С вермишелью':
+          createStep().textContent = lastAdd('вермишель');
+          break;
+        case state == 'С горошком':
+          createStep().textContent = lastAdd('горошек и помидор');
+          break;
+      }
+    }
+    createStep().textContent =
+      'Если места в кастрюле много, а бульона мало - самое время подлить воды. Поварить еще минут 5 все вместе.';
+    createStep().textContent = meatBack;
+  }
+  createStep().textContent = green;
+};
+
+const frying = () =>
+  'Чистим и режем все овощи из списка ингридиентов. Обжариваем лук и чеснок, когда они станут мягкими, добавляем морковку и тоже обжариваем.';
+const moreFrying = (ing) => `Добавляем к зажарке ${ing} и обжариваем еще пять минут уже все вместе.`;
+const removeMeat = 'Достаем мясо остывать.';
+const erlyAdd = (ing) => `В это время закипает картошка, добавляем в нее ${ing}.`;
+const addFrying = 'Когда все снова закипело, отправляем зажарку в кастрюлю. Варим 10 минут.';
+const lastAdd = (ing) => `Добавляем ${ing}.`;
+const meatBack = 'Возвращаем порезанное мясо.';
+const green = 'Добавляем специи. Если есть зелень, тоже добавляем сейчас и выключаем суп. Варить зеленку не надо.';
+const addTune = 'Добавляем тунца из банки и варим все вместе еще минут 5.';

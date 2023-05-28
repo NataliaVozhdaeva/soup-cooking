@@ -12,6 +12,7 @@
 .header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .main {
@@ -30,7 +31,10 @@
 
 .bouillon-list {
   width: 100%;
+  margin: auto;
   display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   justify-content: space-between;
   align-items: center;
 }
@@ -130,6 +134,7 @@
 
 .menu-btns {
   display: flex;
+  flex-wrap: wrap;
   gap: 15px;
 }
 
@@ -214,4 +219,18 @@
   display: flex;
   column-gap: 30px;
   order: 4;
+}
+
+@media only screen and (max-width: 550px) {
+  .bouillon-pic {
+    width: 50vw;
+    height: auto;
+  }
+
+  .header,
+  main {
+    min-width: 300px;
+    margin: auto;
+    align-items: center;
+  }
 }
