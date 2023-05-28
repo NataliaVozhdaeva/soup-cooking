@@ -107,3 +107,8 @@
   -moz-transform: rotateX(-90deg);
   transform: rotateX(-90deg);
 }
+
+.bouillon-pic {
+  width: 200px;
+  height: auto;
+}
