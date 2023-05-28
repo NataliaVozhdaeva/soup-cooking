@@ -190,3 +190,18 @@
   background: url('../assets/icons/arrow.png') no-repeat center;
   background-size: contain;
 }
+
+.ingredients {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 30px;
+}
+
+.ingredients-title {
+  width: 100%;
+}
+
+.ingredients-container {
+  display: flex;
+  flex-direction: column;
+}
