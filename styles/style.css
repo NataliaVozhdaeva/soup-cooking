@@ -9,6 +9,11 @@
   background-color: transparent;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+}
+
 .main {
   width: 75vw;
   margin: auto;
@@ -17,9 +22,6 @@
 .bouillon {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-
-  margin-bottom: 50px;
 }
 
 .bouillon-title {
@@ -194,14 +196,22 @@
 .ingredients {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 30px;
+  gap: 30px 20px;
 }
 
 .ingredients-title {
   width: 100%;
+  margin: 0;
 }
 
 .ingredients-container {
   display: flex;
   flex-direction: column;
+}
+
+.btns-container {
+  width: 100%;
+  display: flex;
+  column-gap: 30px;
+  order: 4;
 }

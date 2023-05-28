@@ -1,10 +1,11 @@
 const bouillonSection = document.querySelector('.bouillon');
 const menuSection = document.querySelector('.menu');
-const menuBtns = document.querySelector('.menu-btns');
 const ingredientsSection = document.querySelector('.ingredients');
 const processSection = document.querySelector('.process');
-
 const bouillonList = document.querySelector('.bouillon-list');
+
+const menuBtns = document.createElement('div');
+menuBtns.className = 'menu-btns';
 
 const bouillon = ['мясо', 'рыба', 'курица'];
 const ingredients = {
@@ -19,7 +20,7 @@ const menu = {
     { Чечевичный: [ingredients['main'], 'чечевица', 'томатная паста или помидор'] },
     { Грибной: [ingredients['main'], 'грибы', 'рис'] },
     { 'С клецками': [ingredients['main'], 'яйцо', 'молоко', 'мука'] },
-    { 'Самое простое/быстрое/ващенекогда': [ingredients['main']] },
+    { 'Самое простое/быстрое/ващенекогда': [ingredients['main'], 'ничего'] },
   ],
   fish: [{ 'С консервой': [ingredients['main'], 'рис'] }],
   chiken: [
@@ -28,32 +29,39 @@ const menu = {
   ],
 };
 
+const header = document.createElement('header');
+header.className = 'header';
+document.querySelector('.main').prepend(header);
+
 const addArrow = () => {
   const arrowSpan = document.createElement('div');
   arrowSpan.className = 'arrow';
-  bouillonSection.append(arrowSpan);
+  header.append(arrowSpan);
 };
 
 const createBoulionEl = (data) => {
+  menuSection.append(menuBtns);
   const bouillonPic = document.createElement('img');
   bouillonPic.setAttribute('data-boullion', data);
   bouillonPic.setAttribute('src', `./assets/content/${data}.png`);
   bouillonPic.className = 'bouillon-pic';
-  bouillonSection.append(bouillonPic);
+  header.append(bouillonPic);
+  header.style.margin = '50px auto';
 };
 
 const createMenuBtn = (item) => {
   const menuItem = document.createElement('button');
-  menuItem.className = 'btn, menu-btn';
+  menuItem.className = 'btn menu-btn';
   menuItem.setAttribute('data-item', Object.keys(item)[0]);
   menuItem.textContent = Object.keys(item)[0];
-  menuBtns.append(menuItem);
+  document.querySelector('.menu-btns').append(menuItem);
 };
 
 const createMenuSection = (data) => {
   const menuTitle = document.createElement('h3');
   menuTitle.textContent = 'Какой суп?';
   menuSection.prepend(menuTitle);
+
   for (let i = 0; i < menu[data].length; i++) {
     setTimeout(() => {
       createMenuBtn(menu[data][i]);
@@ -73,9 +81,9 @@ menuBtns.addEventListener('click', (e) => {
   const data = e.target.dataset.item;
   addArrow();
   const item = document.createElement('button');
-  item.className = 'btn, header-btn';
+  item.className = 'btn header-btn';
   item.textContent = data;
-  bouillonSection.append(item);
+  header.append(item);
   menuSection.classList.add('non-displayed');
   createIngredientsSection(data);
 });
@@ -108,6 +116,7 @@ const createIngredientsSection = (data) => {
       break;
     case data == 'Самое простое/быстрое/ващенекогда':
       createAddIngredientsBlock(data, menu.meat);
+      createIngredientsBlock(ingredients['paprika'], 'Можно добавить:');
       break;
     case data == 'С консервой':
       createAddIngredientsBlock(data, menu.fish);
@@ -121,6 +130,8 @@ const createIngredientsSection = (data) => {
       break;
   }
   createIngredientsBlock(ingredients['optional'], 'Опционально:');
+
+  createIngredientsBtn();
 };
 
 const createAddIngredientsBlock = (data, mainIngr) => {
@@ -157,4 +168,39 @@ const createIngredientsBlock = (arr, title, boullion = false) => {
     el.textContent = item + ' ';
     ingredientsContainer.append(el);
   }
+};
+
+const createIngredientsBtn = () => {
+  const btnsContainer = document.createElement('div');
+  btnsContainer.className = 'btns-container';
+  ingredientsSection.append(btnsContainer);
+
+  const submitBtn = document.createElement('button');
+  submitBtn.className = 'btn menu-btn submit';
+  submitBtn.textContent = 'Все есть, готовим!';
+  btnsContainer.append(submitBtn);
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn menu-btn cancel';
+  cancelBtn.textContent = 'Давай другое';
+  btnsContainer.append(cancelBtn);
+
+  btnsContainer.addEventListener('click', (e) => {
+    e.target.classList.contains('cancel') ? cancelCooking() : discribeProcess();
+  });
+};
+
+const cancelCooking = () => {
+  header.style.margin = '0';
+  Array.from(document.querySelectorAll('.menu-btn')).forEach((el) => el.remove());
+  header.innerHTML = '';
+  menuSection.innerHTML = '';
+  ingredientsSection.innerHTML = '';
+  menuSection.classList.remove('non-displayed');
+  bouillonList.classList.remove('non-displayed');
+  document.querySelector('.bouillon-title').classList.remove('non-displayed');
+};
+
+const discribeProcess = () => {
+  console.log('ok');
 };
